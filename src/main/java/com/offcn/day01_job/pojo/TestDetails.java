@@ -9,7 +9,7 @@ public class TestDetails {
     public Integer getId() {
         return id;
     }
-
+    //ok啊
     public void setId(Integer id) {
         this.id = id;
     }
