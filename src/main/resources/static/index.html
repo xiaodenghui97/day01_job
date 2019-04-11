@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/echarts.common.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div id="myChart" style="width: 1000px;height: 400px"></div>
+</body>
+<script>
+    var myChart = echarts.init(document.getElementById('myChart'));
+    myChart.setOption({
+        //标题
+        title:{
+            text:"考试成绩分析"
+        },
+        //鼠标放上去的提示
+        tooltip: {
+            trigger: 'axis'
+        },
+        //图例组件
+        legend: {
+            data:['最高分','最低分','平均分']
+        },
+        //x轴数据
+        xAxis:{
+            data:[]
+        },
+        //y轴数据
+        yAxis:{
+
+        },
+        //数据
+        series:[{
+            type:"line",
+            data:[]
+        }]
+    });
+    //显示加载动画
+    myChart.showLoading();
+    $.ajax({
+        url:'testAll',
+        type:'post',
+        data:{},
+        dataType:'json',
+        success:function (result) {
+            var topPrice=[];
+            var minimumPrice=[];
+            var middleRate=[];
+            var releaseTime=[];
+            result.forEach(function (item) {
+                topPrice.push(item.highest);
+                minimumPrice.push(item.lowestPoints);
+                middleRate.push(item.average);
+                releaseTime.push(item.time);
+                //隐藏加载动画
+                myChart.hideLoading();
+                myChart.setOption({
+                    xAxis:{
+                        data:releaseTime
+                    },
+                    series:[{
+                        name:"最高分",
+                        type:"line",
+                        data:topPrice
+                    },{
+                        name:"最低分",
+                        type:"line",
+                        data:minimumPrice
+                    },{
+                        name:"平均分",
+                        type:"line",
+                        data:middleRate
+                    }]
+                })
+
+            })
+        }
+    })
+
+</script>
+</html>
